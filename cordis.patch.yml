@@ -1,0 +1,4 @@
+# dsh-pwa bundle: inserts the PWA host plugin row.
+- insert:
+    - id: dsh-pwa
+      name: dsh-pwa

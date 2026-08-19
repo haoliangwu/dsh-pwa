@@ -1,0 +1,35 @@
+{
+  "name": "dsh-pwa",
+  "version": "0.1.0",
+  "description": "DSH PWA plugin: serves manifest + service worker + installable icons, with basePath support for reverse-proxy deployments",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./invariant": "./lib/invariant.js",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "gen-icons": "node scripts/gen-icons.mjs",
+    "test": "vitest run"
+  },
+  "license": "MIT",
+  "files": [
+    "lib/",
+    "assets/",
+    "cordis.patch.yml"
+  ],
+  "devDependencies": {
+    "tsdown": "^0.12.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.8",
+    "@resvg/resvg-js": "^2.6.2",
+    "@deepseek-ai/schemastery": "^3.18.0"
+  }
+}
