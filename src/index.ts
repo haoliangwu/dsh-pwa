@@ -114,19 +114,23 @@ export function buildTapIndex(basePath: string): (html: string) => string {
  * at application time and cached; requests re-send the cached Buffer.
  * @param file - asset path relative to `assets/`.
  * @param contentType - Content-Type to send (no charset by default).
+ * @param extraHeaders - optional extra response headers (e.g. Service-Worker-Allowed).
  * @returns a {@link WebRoute['handler']} serving the cached bytes.
  */
-function serveStatic(file: string, contentType: string): WebRoute['handler'] {
+function serveStatic(
+  file: string,
+  contentType: string,
+  extraHeaders: Record<string, string> = {},
+): WebRoute['handler'] {
   const buffer = readFileSync(fileURLToPath(new URL(`../assets/${file}`, import.meta.url)))
   return (_req, res) => {
-    res.writeHead(200, { 'Content-Type': contentType, 'Content-Length': buffer.length })
+    res.writeHead(200, { 'Content-Type': contentType, 'Content-Length': buffer.length, ...extraHeaders })
     res.end(buffer)
   }
 }
 
 /** Raw paths under `${basePath}pwa/*` mapped to their static asset + content type. */
 const STATIC_ASSETS: ReadonlyArray<readonly [string, string, string]> = [
-  ['sw.js', 'sw.js', 'text/javascript'],
   ['icon-192.png', 'icon-192.png', 'image/png'],
   ['icon-512.png', 'icon-512.png', 'image/png'],
   ['favicon.svg', 'favicon.svg', 'image/svg+xml'],
@@ -148,6 +152,13 @@ export function apply(ctx: Context, config: Config): void {
         res.writeHead(200, { 'Content-Type': 'application/manifest+json' })
         res.end(JSON.stringify(buildManifest(basePath)))
       },
+    }),
+    // sw.js gets its own registration: Service-Worker-Allowed must be set so the
+    // SW at /pwa/sw.js can control the full basePath scope (not just /pwa/*).
+    ctx.webServer.register({
+      kind: 'exact',
+      path: `${basePath}pwa/sw.js`,
+      handler: serveStatic('sw.js', 'text/javascript', { 'Service-Worker-Allowed': basePath }),
     }),
     ...STATIC_ASSETS.map(([route, file, contentType]) =>
       ctx.webServer.register({ kind: 'exact', path: `${basePath}pwa/${route}`, handler: serveStatic(file, contentType) }),
