@@ -14,13 +14,17 @@ Built `lib/` and `assets/` are committed, so the git install is one line — no 
 
 ## Configure
 
-`basePath` defaults to `/` (install at the origin root). For a reverse-proxy deployment mounted at `/dsh/`, set it in your profile's `cordis.patch.yml` (`~/.dsh/profiles/web/cordis.patch.yml`):
+`basePath` defaults to `/` (install at the origin root). For a reverse-proxy deployment mounted at `/dsh/`, add the plugin to your profile's `cordis.patch.yml` (`~/.dsh/profiles/web/cordis.patch.yml`) via the `insert` form (the config-overlay form only tunes plugins already listed in `dsh.profile.bundles`):
 
 ```yaml
-- id: dsh-pwa
-  config:
-    basePath: /dsh/
+- insert:
+    - id: dsh-pwa
+      name: dsh-pwa
+      config:
+        basePath: /dsh/
 ```
+
+After a `dsh plugin add` install, the bare `- id: dsh-pwa` row is already in place; only append the `config:` block to tune `basePath`.
 
 Normalization applies automatically: `''`/`'/'` → `'/'`, `'/dsh'` → `'/dsh/'`, `'dsh/'` → `'/dsh/'`, `'/dsh/'` unchanged. Values containing `?` or `#` are rejected.
 

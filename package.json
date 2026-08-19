@@ -20,6 +20,11 @@
     "test": "vitest run"
   },
   "license": "MIT",
+  "author": "haoliangwu",
+  "repository": {
+    "type": "git",
+    "url": "github:haoliangwu/dsh-pwa"
+  },
   "files": [
     "lib/",
     "assets/",
