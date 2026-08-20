@@ -2,6 +2,8 @@
 
 <p align="center">Makes a running `dsh web` instance installable as a PWA — manifest + service worker + icons, with `basePath` support for reverse-proxy deployments.</p>
 
+<p align="center"><img src="docs/pwa-standalone-window.png" alt="DeepSeek Harness PWA running as a standalone macOS app window" width="640"></p>
+
 A pure host-side plugin for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). The web frontend already ships a manifest and favicon in its dist, but no service worker or SW registration script — so Chrome's installability check fails. This plugin fills that gap and lets the app be mounted under a reverse-proxy sub-path.
 
 ## Install
