@@ -6,6 +6,11 @@
 
 A pure host-side plugin for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). The web frontend already ships a manifest and favicon in its dist, but no service worker or SW registration script — so Chrome's installability check fails. This plugin fills that gap and lets the app be mounted under a reverse-proxy sub-path.
 
+- **One-line install, no build step.** `lib/` and `assets/` are committed — the git install just works.
+- **Fills exactly one gap.** The stock dist already ships a manifest and favicon; this plugin adds the missing service worker + registration script, so Chrome's installability check passes.
+- **Reverse-proxy ready.** Every route and URL is `basePath`-rooted, with normalization (`''`/`'/'` → `/`, `/dsh` → `/dsh/`, …) and `?`/`#` rejected.
+- **Five routes, zero per-request reads.** `manifest.webmanifest`, `sw.js`, `icon-192.png`/`icon-512.png`, `favicon.svg` — static assets cached in the handler closure at apply time.
+
 ## Install
 
 ```sh
